@@ -1,2 +1,2 @@
 # netprox
-application which connects netbox with proxmox
+application that connects netbox with proxmox
