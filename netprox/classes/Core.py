@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'Christopher Hoffmann'
-__contact__ = 'christopher.hoffmann@zalando.de'
-__license__ = 'MIT'
-__copyright__ = '(c) by Zalando SE'
-__version__ = '0.1.0'
+__author__ = "Christopher Hoffmann"
+__contact__ = "christopher.hoffmann@zalando.de"
+__license__ = "MIT"
+__copyright__ = "(c) by Zalando SE"
+__version__ = "0.1.0"
 
 import logging
 
@@ -47,21 +47,22 @@ class VMachine(NetboxObject):
 
 
 class Proxmox(ProxmoxAPI):
-    def __init__(self,
-                 host: str,
-                 username: str,
-                 token_name: str,
-                 token: str,
-                 vm_id: str,
-                 ssl_verify=True,
-                 node_name='proxmox'
-                 ):
+    def __init__(
+        self,
+        host: str,
+        username: str,
+        token_name: str,
+        token: str,
+        vm_id: str,
+        ssl_verify=True,
+        node_name="proxmox",
+    ):
         super().__init__(
             host=host,
             user=username,
             token_name=token_name,
             token_value=token,
-            verify_ssl=ssl_verify
+            verify_ssl=ssl_verify,
         )
         self.vm_id = vm_id
         self.ssl_verify = ssl_verify
@@ -76,7 +77,12 @@ class Proxmox(ProxmoxAPI):
             self.ssl_verify = self.ssl_verify
 
     def _get_vm_status(self):
-        return self.nodes(self.node_name).qemu(self.vm_id).status.current.get().get("status")
+        return (
+            self.nodes(self.node_name)
+            .qemu(self.vm_id)
+            .status.current.get()
+            .get("status")
+        )
 
     def create_vm(self, vm_specs: dict = None):
         node = self.nodes(self.node_name)
@@ -94,7 +100,7 @@ class Proxmox(ProxmoxAPI):
     def delete_vm(self):
         if self._get_vm_status() == "running":
             self.stop_vm()
-            if self._get_vm_status() != 'stopped':
+            if self._get_vm_status() != "stopped":
                 return False
             else:
                 self.nodes(self.node_name).qemu.delete(self.vm_id)
@@ -140,15 +146,17 @@ class NetboxCall(pynetbox.api):
         getting the raw data from a Netbox device and fills self.device_raw_dict
         :return:
         """
-        logger.debug('getting device %s', self.vm)
-        self.vm = self.virtualization.virtual_machines.get(self.netbox_id)  # get device with a specific id
+        logger.debug("getting device %s", self.vm)
+        self.vm = self.virtualization.virtual_machines.get(
+            self.netbox_id
+        )  # get device with a specific id
         self.vm_raw_dict = dict(self.vm)  # fill the empty dict with device information
 
     def update_vm_information(self, new_info: dict = None):
         self.vm.update(new_info)
         return dict(self.vm)
 
-    def create_tag(self, tag_name: str, color: str = 'c0c0c0'):
+    def create_tag(self, tag_name: str, color: str = "c0c0c0"):
         """
         checks if a tag in Netbox exists, if not it will create the tag.
         :param tag_name: Name of the tag.
@@ -158,7 +166,9 @@ class NetboxCall(pynetbox.api):
         tag = self.extras.tags.get(name=tag_name)
         if not tag:
             print(f"Tag does not exist. Creating tag {tag_name}...")
-            self.extras.tags.create(name=tag_name, slug=tag_name.lower(), color=color.lower())
+            self.extras.tags.create(
+                name=tag_name, slug=tag_name.lower(), color=color.lower()
+            )
             tag = self.extras.tags.get(name=tag_name)
             return tag.id
         else:
