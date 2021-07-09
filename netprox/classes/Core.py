@@ -85,13 +85,18 @@ class Proxmox(ProxmoxAPI):
         )
 
     def create_vm(self, vm_specs: dict = None):
+        if not vm_specs:
+            return False
         node = self.nodes(self.node_name)
         node.qemu.create(**vm_specs)
         return True
 
     def stop_vm(self):
         self.nodes(self.node_name).qemu(self.vm_id).status.stop.post()
-        return True
+        if self._get_vm_status() == "stopped":
+            return True
+        else:
+            return False
 
     def shutdown_vm(self):
         self.nodes(self.node_name).qemu(self.vm_id).status.shutdown.post()
@@ -149,10 +154,12 @@ class NetboxCall(pynetbox.api):
         logger.debug("getting device %s", self.vm)
         self.vm = self.virtualization.virtual_machines.get(
             self.netbox_id
-        )  # get device with a specific id
-        self.vm_raw_dict = dict(self.vm)  # fill the empty dict with device information
+        )
+        self.vm_raw_dict = dict(self.vm)
 
     def update_vm_information(self, new_info: dict = None):
+        if not new_info:
+            return None
         self.vm.update(new_info)
         return dict(self.vm)
 
@@ -163,6 +170,9 @@ class NetboxCall(pynetbox.api):
         :param color: Enter a valid hexadecimal RGB color code. Default is grey.
         :return: tag name
         """
+        if not tag_name:
+            return None
+
         tag = self.extras.tags.get(name=tag_name)
         if not tag:
             print(f"Tag does not exist. Creating tag {tag_name}...")
