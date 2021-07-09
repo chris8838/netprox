@@ -1,0 +1,5 @@
+pynetbox==6.1.2
+proxmoxer==1.1.1
+Flask==2.0.1
+gunicorn==20.1.0
+requests~=2.25.1
