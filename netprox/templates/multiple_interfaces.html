@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Multiple Interfaces{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="container">
+            <h1>Multiple Interfaces</h1>
+            We found an issue with your request.<br>
+            It's not allowed to have a device where the interface names are used more than once.<br><br>
+            Please go back and correct names of the interfaces!<br>
+            <a type="back-button" class="btn btn-info" href="javascript:history.back()">Back</a><br><br>
+            {% for interface in multiple_interfaces %}
+            <div class="alert alert-secondary" role="alert">
+                Interface "{{ interface }}" has multiple candidates<br>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

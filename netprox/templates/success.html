@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Success{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="container">
+            <h1>Success</h1>
+            Looks like everything went well.<br>
+            Here is the result: {{result}}<br>
+            <br>
+            <a href="https://{{ proxmox_url }}:8006/#v1:0:=node%2Fproxmox:4:::::::" target="_blank">Check the VM in Proxmox.</a><br><br>
+            <a type="back-button" class="btn btn-info" href="javascript:history.back()">Back</a><br><br>
+        </div>
+    </div>
+{% endblock %}
