@@ -98,6 +98,17 @@ class Proxmox(ProxmoxAPI):
         else:
             return False
 
+    def suspend_vm(self):
+        self.nodes(self.node_name).qemu(self.vm_id).status.suspend.post()
+        return True
+
+    def start_vm(self):
+        if self._get_vm_status() == "stopped":
+            self.nodes(self.node_name).qemu(self.vm_id).status.start.post()
+            return True
+        else:
+            return False
+
     def shutdown_vm(self):
         self.nodes(self.node_name).qemu(self.vm_id).status.shutdown.post()
         return True
