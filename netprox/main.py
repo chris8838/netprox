@@ -57,6 +57,40 @@ prepare_logger()
 logger.debug("Flask loaded")
 
 
+@app.post("/webhook/update-vmachine")
+def vm_update():
+    if not request.json.get("event", ""):
+        return "not a delete event", 401
+
+    if not request.headers.get("X-Hook-Signature"):
+        logger.warning("signature missing")
+        return "signature missing", 401
+
+    # logger.debug("Received the following Header:\n%s", request.headers)
+    # logger.debug("Received the following data:\n%s", request.data)
+    # logger.debug("Received the following data/json:\n%s", request.json)
+    vm_info = request.json.get("data", {})
+
+    p = Proxmox(
+        host=cf.proxmox_host,
+        username=cf.proxmox_user,
+        token_name=cf.proxmox_token_name,
+        token=cf.proxmox_token,
+        ssl_verify=False,
+        vm_id=vm_info.get("custom_fields", {}).get("vmid"),
+    )
+
+    if request.json.get("data", {}).get("status", {}).get("value", "") == "offline":
+        p.stop_vm()
+        return "VM marked as Offline, Proxmox stopped the VM"
+    if request.json.get("data", {}).get("status", {}).get("value", "") == "active":
+        p.start_vm()
+        return "VM marked as Active, Proxmox is starting the VM"
+    else:
+        print(request.json.get("data", {}).get("status", {}).get("value", ""))
+        return request.json.get("data", {}).get("status", {}).get("value", "")
+
+
 @app.post("/webhook/delete-vmachine")
 def webhook():
     """
@@ -87,7 +121,7 @@ def webhook():
 
     vm_info = request.json.get("data", {})
     vm = VMachine(webhook_data=vm_info, **vm_info.get("custom_fields", {}))
-    print(cf.proxmox_token)
+
     p = Proxmox(
         host=cf.proxmox_host,
         username=cf.proxmox_user,
@@ -104,7 +138,6 @@ def webhook():
 
 @app.route("/webhook/create-vm-button", methods=["GET"])
 def button():
-    # print(request.values.get('id'))
 
     nb = NetboxCall(
         netbox_url=cf.netbox_url,
@@ -116,10 +149,10 @@ def button():
     netbox_vm_vmid = nb.vm.custom_fields.get("vmid", None)
 
     p = Proxmox(
-        host="192.168.1.30",
-        username="chris@pve",
-        token_name="super-token",
-        token="dd4b88c8-f5a7-45bf-bd6c-e359b6cec705",
+        host=cf.proxmox_host,
+        username=cf.proxmox_user,
+        token_name=cf.proxmox_token_name,
+        token=cf.proxmox_token,
         ssl_verify=False,
         vm_id=netbox_vm_vmid,
     )
