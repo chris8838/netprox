@@ -126,6 +126,13 @@ class Proxmox(ProxmoxAPI):
             return True
         return False
 
+    def vm_network_interface(self):
+        return self.nodes(self.node_name).qemu(self.vm_id).agent.get("network-get-interfaces")
+
+    def clone_template_vm(self, new_vm_id: int = None):
+        self.nodes(self.node_name).qemu(self.vm_id).clone().post(newid=new_vm_id)
+        return True
+
     @property
     def vms(self):
         all_vms = []

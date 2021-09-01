@@ -194,15 +194,31 @@ def button():
         message = "Not all data to create the VM are provided."
         return render_template("error.html", message=message)
 
-    tag = nb.create_tag(tag_name="created", color="8bc34a")
-    netbox_label = {"tags": [tag]}
-    nb.update_vm_information(netbox_label)
-
-    return render_template(
-        "success.html",
-        proxmox_url=cf.proxmox_host,
-        result=p.create_vm(vm_specs=vm_data),
-    )
+    if str(nb.vm.status) == "Staged":
+        vm_data["start"] = 0
+        tag = nb.create_tag(tag_name="staged", color="8bc34a")
+        netbox_label = {"tags": [tag]}
+        nb.update_vm_information(netbox_label)
+        return render_template(
+            "success.html",
+            proxmox_url=cf.proxmox_host,
+            result=f"VM crated with result: {p.create_vm(vm_specs=vm_data)} but not started",
+        )
+    if str(nb.vm.status) == "Planned":
+        return render_template(
+            "success.html",
+            proxmox_url=cf.proxmox_host,
+            result="Status of the VM is Planned. VM will not be created in Proxmox",
+        )
+    else:
+        tag = nb.create_tag(tag_name="created", color="8bc34a")
+        netbox_label = {"tags": [tag]}
+        nb.update_vm_information(netbox_label)
+        return render_template(
+            "success.html",
+            proxmox_url=cf.proxmox_host,
+            result=p.create_vm(vm_specs=vm_data),
+        )
 
 
 @app.route("/health", methods=["GET"])
