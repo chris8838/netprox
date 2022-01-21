@@ -9,8 +9,8 @@ __license__ = "MIT"
 __copyright__ = "(c) by Zalando SE"
 __version__ = "0.1.0"
 
-from main import app
-from classes import cf, all_config
+from netprox.main import app
+from netprox.classes import cf, all_config
 
 if __name__ == "__main__":
     if all_config:
