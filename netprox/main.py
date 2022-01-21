@@ -19,8 +19,8 @@ from _hashlib import HASH
 from flask import Flask
 from flask import request, render_template
 
-from classes import cf, config
-from classes.Core import VMachine, Proxmox, NetboxCall
+from netprox.classes import cf, config
+from netprox.classes.Core import VMachine, Proxmox, NetboxCall
 
 logger = logging.getLogger(__virtual_name__)
 
@@ -139,6 +139,9 @@ def webhook():
 @app.route("/webhook/create-vm-button", methods=["GET"])
 def button():
 
+    logger.debug("Received the following Header:\n%s", request.headers)
+    # logger.debug("Received the following data:\n%s", request.data)
+    # logger.debug("Received the following data/json:\n%s", request.json)
     nb = NetboxCall(
         netbox_url=cf.netbox_url,
         netbox_token=cf.netbox_token,
@@ -187,6 +190,7 @@ def button():
         "scsi0": f"local-lvm:{nb.vm.disk}",
         "cores": int(float(nb.vm.vcpus)),
         "start": 1,
+        "net0": "virtio,bridge=vmbr0"
     }
 
     if not all(vm_raw_data):
