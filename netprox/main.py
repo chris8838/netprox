@@ -19,7 +19,7 @@ from _hashlib import HASH
 from flask import Flask
 from flask import request, render_template
 
-from netprox.classes import cf, config
+from netprox.classes import cf
 from netprox.classes.Core import VMachine, Proxmox, NetboxCall
 
 logger = logging.getLogger(__virtual_name__)
@@ -163,7 +163,7 @@ def button():
     all_vms = p.vms
     for vm in all_vms:
         if vm.get("vmid") == str(netbox_vm_vmid) and vm.get("name") == nb.vm.name:
-            message = f"VM with the same name and ID exists already!"
+            message = "VM with the same name and ID exists already!"
             return render_template("error.html", message=message)
 
         if vm.get("vmid") == str(netbox_vm_vmid):
@@ -190,7 +190,7 @@ def button():
         "scsi0": f"local-lvm:{nb.vm.disk}",
         "cores": int(float(nb.vm.vcpus)),
         "start": 1,
-        "net0": "virtio,bridge=vmbr0"
+        "net0": "virtio,bridge=vmbr0",
     }
 
     if not all(vm_raw_data):
