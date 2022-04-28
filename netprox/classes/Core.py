@@ -127,7 +127,11 @@ class Proxmox(ProxmoxAPI):
         return False
 
     def vm_network_interface(self):
-        return self.nodes(self.node_name).qemu(self.vm_id).agent.get("network-get-interfaces")
+        return (
+            self.nodes(self.node_name)
+            .qemu(self.vm_id)
+            .agent.get("network-get-interfaces")
+        )
 
     def clone_template_vm(self, new_vm_id: int = None):
         self.nodes(self.node_name).qemu(self.vm_id).clone().post(newid=new_vm_id)
@@ -170,9 +174,7 @@ class NetboxCall(pynetbox.api):
         :return:
         """
         logger.debug("getting device %s", self.vm)
-        self.vm = self.virtualization.virtual_machines.get(
-            self.netbox_id
-        )
+        self.vm = self.virtualization.virtual_machines.get(self.netbox_id)
         self.vm_raw_dict = dict(self.vm)
 
     def update_vm_information(self, new_info: dict = None):
