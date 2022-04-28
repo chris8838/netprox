@@ -1,3 +1,4 @@
+![Tests](https://github.com/chris8838/netprox/actions/workflows/pylint.yml/badge.svg)
 # NetProx
 Application that connects Netbox with Proxmox in order to create VMs in proxmox.
 
