@@ -3,7 +3,7 @@
 Application that connects Netbox with Proxmox in order to create VMs in proxmox.
 
 ## Usage
-Webhooks will be send to Netprox and and it will create VMs via an API call in Proxmox.  
+Webhooks from Netbox need to be send to Netprox application and it will create VMs via an API call in Proxmox.  
 Netprox will act as a middleware between Netbox and Proxmox.
 
 ##TODO
