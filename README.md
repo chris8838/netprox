@@ -7,6 +7,23 @@ Application that connects Netbox with Proxmox in order to create VMs in proxmox.
 Webhooks will be send to Netprox and and it will create VMs via an API call in Proxmox.  
 Netprox will act as a middleware between Netbox and Proxmox.
 
+## Docker
+In order to run a container you need to first build the docker image from the Dockerfile   
+by typing the following command while you are in the folder `docker build -t netprox:latest .` .
+If this build is finished it is recommended to create and `env.list` file containing all the needed environment variables.
+Example of the content from a env.list file:
+``` 
+NETBOX_URL=https://netbox.myhome.org
+PROXMOX_USER=admin
+...
+```
+After you created the env.list file you can start the container temporary with the command:   
+`docker run --rm --env-file envs.list -p 5000:5000 --name netprox netprox:latest`
+or to have the container run as a demon:  
+`docker run -d --env-file envs.list -p 5000:5000 --name netprox netprox:latest`
+
+For the future there is a docker-compose file planed. 
+
 ## Netbox configuration
 
 In order to let Netbox create a VM for you it is recommanded to 
