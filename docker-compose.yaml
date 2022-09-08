@@ -1,0 +1,22 @@
+services:
+  netprox:
+    build:
+      context: .
+    image: netprox:latest
+    container_name: netprox
+    ports:
+      - "5000:5000/udp"
+    environment:
+      - LOG_LEVEL="DEBUG"
+      - NETBOX_URL=""
+      - NETBOX_TOKEN=""
+      - NETBOX_WEBHOOK_SECRET=""
+      - NETBOX_SSL_VERIFY=0
+      - PROXMOX_HOST=""
+      - PROXMOX_TOKEN=""
+      - PROXMOX_TOKEN_NAME=""
+      - PROXMOX_USER=""
+      - PROXMOX_SSL_VERIFY=0
+      - FLASK_DEBUG=True
+      - FLASK_HOST="127.0.0.1"
+      - FLASK_SECRETKEY="beX0aem3vee7ohn"
