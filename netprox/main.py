@@ -27,7 +27,7 @@ logger = logging.getLogger(__virtual_name__)
 
 def prepare_logger():
     log_level = logging.getLevelName(os.getenv("LOG_LEVEL", "ERROR"))
-    log_level = log_level if type(log_level) == int else logging.ERROR
+    log_level = log_level if isinstance(log_level, int) else logging.ERROR
     logger.setLevel(log_level)
     stream_formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
