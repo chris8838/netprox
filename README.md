@@ -1,4 +1,5 @@
 ![Tests](https://github.com/chris8838/netprox/actions/workflows/base_checks.yml/badge.svg)
+![Docker](https://github.com/chris8838/netprox/actions/workflows/docker.yml/badge.svg)
 
 # NetProx  
 Application that connects Netbox with Proxmox in order to create VMs in proxmox.
