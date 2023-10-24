@@ -1,4 +1,4 @@
-name: tox
+name: base_checks
 
 on:
   push:
