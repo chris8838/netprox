@@ -16,6 +16,15 @@ jobs:
         if: always()
         with:
           name: lint-logs
+          path: |
+            .flake8
+            .flake8.*
+            .flake8.*.*
+            .flake8.*.*.*
+            .flake8.*.*.*.*
+            .flake8.*.*.*.*.*
+            .flake8.*.*.*.*.*.*
+            .flake8.*.*
           retention-days: 30
       - name: Lint code
         run: |
@@ -27,7 +36,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.7', '3.8', '3.9' ]
+        python-version: ['3.8', '3.9' ]
     runs-on: ${{ matrix.os }}
 
     steps:
