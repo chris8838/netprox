@@ -12,19 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: lint-logs
           path: |
             .flake8
-            .flake8.*
-            .flake8.*.*
-            .flake8.*.*.*
-            .flake8.*.*.*.*
-            .flake8.*.*.*.*.*
-            .flake8.*.*.*.*.*.*
-            .flake8.*.*
           retention-days: 30
       - name: Lint code
         run: |
@@ -42,7 +35,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: tox-logs
@@ -50,14 +43,7 @@ jobs:
           path: |
             .tox
             .coverage
-            .coverage.*
-            .coverage.*.*
-            .coverage.*.*.*
-            .coverage.*.*.*.*
-            .coverage.*.*.*.*.*
-            .coverage.*.*.*.*.*.*
-            .coverage
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
