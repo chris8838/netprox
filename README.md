@@ -1,7 +1,14 @@
-![Tests](https://github.com/chris8838/netprox/actions/workflows/ci.yml/badge.svg)
+<br>
 
-# NetProx  
-Application that connects Netbox with Proxmox in order to create VMs in proxmox.
+<div align="center">
+  <H1> Netprox </H1>
+    <p>Netbox and Proxmox integration</p>
+  <img src="https://github.com/chris8838/netprox/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI status" />
+</div>
+
+
+
+An Application that connects Netbox with Proxmox in order to create VMs in Proxmox out of Netbox.
 
 ## Usage  
 
