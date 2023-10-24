@@ -134,7 +134,9 @@ class Proxmox(ProxmoxAPI):
         )
 
     def clone_template_vm(self, new_vm_id: int = None):
-        self.nodes(self.node_name).qemu(self.vm_id).clone().post(newid=new_vm_id)
+        self.nodes(self.node_name).qemu(self.vm_id).clone().post(
+            newid=new_vm_id
+        )
         return True
 
     @property
