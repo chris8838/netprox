@@ -1,0 +1,60 @@
+name: tox
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev]
+
+jobs:
+  lint:
+    container: python:3.9
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: lint-logs
+          retention-days: 30
+      - name: Lint code
+        run: |
+          pip install --upgrade pip
+          pip install flake8
+          flake8
+
+  tox:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.6', '3.7', '3.8', '3.9' ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: tox-logs
+          retention-days: 30
+          path: |
+            .tox
+            .coverage
+            .coverage.*
+            .coverage.*.*
+            .coverage.*.*.*
+            .coverage.*.*.*.*
+            .coverage.*.*.*.*.*
+            .coverage.*.*.*.*.*.*
+            .coverage
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox tox-gh-actions
+      - name: Run tox
+        run: |
+          tox
