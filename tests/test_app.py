@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 __author__ = "Christopher Hoffmann"
 __contact__ = "christopher.hoffmann@zalando.de"

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 __author__ = "Christopher Hoffmann"
 __contact__ = "christopher.hoffmann@zalando.de"
@@ -7,16 +6,18 @@ __license__ = "MIT"
 __copyright__ = "(c) by Zalando SE"
 __version__ = "0.1.0"
 
-import os
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 
 class Config:
     """
-    Gets the config from environment variables and sets them as class objects. In addition you can
-    provide kwargs which become class objects as well. In addition all the config will be stored in a dict which you can
+    Gets the config from environment variables and sets them as class objects.
+    In addition, you can
+    provide kwargs which become class objects as well.
+    In addition, all the config will be stored in a dict which you can
     access via the class object 'get_config' .
     Example:
         cf = Config(MYCONFIG='TEST.cfg')
@@ -66,7 +67,8 @@ class Config:
         }
         if self.kwargs:
             logger.debug(
-                "all_config(self): kwargs are set and will be added to the config dict"
+                "all_config(self): kwargs are set and will "
+                "be added to the config dict"
             )
             self.all_config_dict.update(standard_conf)
             self.all_config_dict.update(self.kwargs)

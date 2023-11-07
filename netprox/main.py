@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 __author__ = "Christopher Hoffmann"
 __contact__ = "christopher.hoffmann@zoutlook.com"
@@ -7,14 +6,12 @@ __license__ = "MIT"
 __version__ = "0.1.0"
 __virtual_name__ = "netprox_main"
 
-import os
 import logging
+import os
 
+from flask import Flask, request
 
-from flask import Flask
-from flask import request
-
-from netprox.backend import update_vm, delete_vm, create_vm
+from netprox.backend import create_vm, delete_vm, update_vm
 from netprox.classes import cf
 
 logger = logging.getLogger(__virtual_name__)

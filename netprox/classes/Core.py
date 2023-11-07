@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 __author__ = "Christopher Hoffmann"
 __contact__ = "christopher.hoffmann@zalando.de"
@@ -95,8 +94,8 @@ class Proxmox(ProxmoxAPI):
         self.nodes(self.node_name).qemu(self.vm_id).status.stop.post()
         if self._get_vm_status() == "stopped":
             return True
-        else:
-            return False
+
+        return False
 
     def suspend_vm(self):
         self.nodes(self.node_name).qemu(self.vm_id).status.suspend.post()

@@ -4,3 +4,5 @@ Flask==2.2.5
 gunicorn==20.1.0
 requests==2.27.1
 pytest
+pytest-cov
+ruff

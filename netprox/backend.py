@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 __author__ = "Christopher Hoffmann"
 __contact__ = "christopher.hoffmann@zalando.de"
 __license__ = "MIT"
 __virtual_name__ = "netprox_backend"
 
+import hashlib
+import hmac
 import logging
 import os
-import hmac
-import hashlib
-
-from flask import render_template
 from typing import Callable
-from _hashlib import HASH
 
-from netprox.classes.Core import VMachine, Proxmox, NetboxCall
+from _hashlib import HASH
+from flask import render_template
+
 from netprox.classes import cf
+from netprox.classes.Core import NetboxCall, Proxmox, VMachine
 
 logger = logging.getLogger(__virtual_name__)
 
@@ -195,14 +194,14 @@ def create_vm(request_obj) -> str:
             "success.html",
             proxmox_url=cf.proxmox_host,
             result=f"VM crated with result: "
-                   f"{p.create_vm(vm_specs=vm_data)} but not started",
+            f"{p.create_vm(vm_specs=vm_data)} but not started",
         )
     if str(nb.vm.status) == "Planned":
         return render_template(
             "success.html",
             proxmox_url=cf.proxmox_host,
             result="Status of the VM is Planned. "
-                   "VM will not be created in Proxmox",
+            "VM will not be created in Proxmox",
         )
     else:
         tag = nb.create_tag(tag_name="created", color="8bc34a")
