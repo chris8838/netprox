@@ -26,6 +26,17 @@ def _check_signature(
     signature: str,
     digestmode: Callable[[str], HASH] = hashlib.sha512,
 ) -> bool:
+    """
+    This function is checking the signature of the webhook
+    Args:
+        key: key from the webhook
+        msg: message from the webhook
+        signature: signature from the webhook
+        digestmode: mode for the digest
+
+    Returns: bool
+
+    """
     digester = hmac.new(key=key, msg=msg, digestmod=digestmode)
 
     return digester.hexdigest() == signature
@@ -35,9 +46,9 @@ def update_vm(request_obj) -> tuple:
     """
     This function is called by the webhook and will update the VM in Netbox
     Args:
-        request_obj:
+        request_obj: request object from flask
 
-    Returns:
+    Returns: tuple with message and status code
 
     """
     if not request_obj.json.get("event", ""):
@@ -47,9 +58,6 @@ def update_vm(request_obj) -> tuple:
         logger.warning("signature missing")
         return "signature missing", 401
 
-    # logger.debug("Received the following Header:\n%s", request.headers)
-    # logger.debug("Received the following data:\n%s", request.data)
-    # logger.debug("Received the following data/json:\n%s", request.json)
     vm_info = request_obj.json.get("data", {})
 
     p = Proxmox(
@@ -83,6 +91,14 @@ def update_vm(request_obj) -> tuple:
 
 
 def delete_vm(request_obj) -> tuple:
+    """
+    This function is called by the webhook and will delete the VM in Proxmox
+    Args:
+        request_obj: request object from flask
+
+    Returns: tuple with message and status code
+
+    """
     logger.debug("Received the following Header:\n%s", request_obj.headers)
     logger.debug("Received the following data:\n%s", request_obj.data)
     logger.debug("Received the following data/json:\n%s", request_obj.json)
@@ -121,7 +137,15 @@ def delete_vm(request_obj) -> tuple:
     return {"message": "ok"}, 200
 
 
-def create_vm(request_obj) -> str:
+def create_vm(request_obj) -> render_template:
+    """
+    This function is called by the webhook and will create the VM in Proxmox
+    Args:
+        request_obj: request object from flask
+
+    Returns: render_template
+
+    """
     logger.debug("Received the following Header:\n%s", request_obj.headers)
     # logger.debug("Received the following data:\n%s", request.data)
     # logger.debug("Received the following data/json:\n%s", request.json)

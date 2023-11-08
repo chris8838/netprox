@@ -75,7 +75,12 @@ class Proxmox(ProxmoxAPI):
         else:
             self.ssl_verify = self.ssl_verify
 
-    def _get_vm_status(self):
+    def _get_vm_status(self) -> str:
+        """
+        Returns the status of a VM
+        Returns: status of a VM
+
+        """
         return (
             self.nodes(self.node_name)
             .qemu(self.vm_id)
@@ -83,7 +88,15 @@ class Proxmox(ProxmoxAPI):
             .get("status")
         )
 
-    def create_vm(self, vm_specs: dict = None):
+    def create_vm(self, vm_specs: dict | None = None) -> bool:
+        """
+        Creates a VM on a Proxmox node
+        Args:
+            vm_specs: Details for the VM
+
+        Returns: True if VM is created, else False
+
+        """
         if not vm_specs:
             return False
         node = self.nodes(self.node_name)
@@ -91,6 +104,11 @@ class Proxmox(ProxmoxAPI):
         return True
 
     def stop_vm(self):
+        """
+        Stops a VM in Proxmox
+        Returns: True if VM is stopped, else False
+
+        """
         self.nodes(self.node_name).qemu(self.vm_id).status.stop.post()
         if self._get_vm_status() == "stopped":
             return True
@@ -98,21 +116,41 @@ class Proxmox(ProxmoxAPI):
         return False
 
     def suspend_vm(self):
+        """
+        Suspends a VM in Proxmox
+        Returns: True if VM is suspended
+
+        """
         self.nodes(self.node_name).qemu(self.vm_id).status.suspend.post()
         return True
 
-    def start_vm(self):
+    def start_vm(self) -> bool:
+        """
+        Starts a VM in Proxmox
+        Returns: True if VM is started, else False
+
+        """
         if self._get_vm_status() == "stopped":
             self.nodes(self.node_name).qemu(self.vm_id).status.start.post()
             return True
         else:
             return False
 
-    def shutdown_vm(self):
+    def shutdown_vm(self) -> bool:
+        """
+        Shutdown a VM in Proxmox
+        Returns: True if VM is shutdown
+
+        """
         self.nodes(self.node_name).qemu(self.vm_id).status.shutdown.post()
         return True
 
-    def delete_vm(self):
+    def delete_vm(self) -> bool:
+        """
+        Deletes a VM in Proxmox
+        Returns: True if VM is deleted, else False
+
+        """
         if self._get_vm_status() == "running":
             self.stop_vm()
             if self._get_vm_status() != "stopped":
@@ -126,20 +164,41 @@ class Proxmox(ProxmoxAPI):
         return False
 
     def vm_network_interface(self):
+        """
+        Returns the network interfaces of a VM
+        Returns: network interfaces of a VM
+
+        """
         return (
             self.nodes(self.node_name)
             .qemu(self.vm_id)
             .agent.get("network-get-interfaces")
         )
 
-    def clone_template_vm(self, new_vm_id: int = None):
+    def clone_template_vm(self, new_vm_id: int | None = None) -> bool:
+        """
+        Create VM based on a template
+        Args:
+            new_vm_id: ID of the new VM
+
+        Returns:
+
+        """
+        if not new_vm_id:
+            return False
+
         self.nodes(self.node_name).qemu(self.vm_id).clone().post(
             newid=new_vm_id
         )
         return True
 
     @property
-    def vms(self):
+    def vms(self) -> list[str]:
+        """
+        Returns all VMs on a Proxmox node
+        Returns: list of VMs
+
+        """
         all_vms = []
         vms = self.nodes(self.node_name).qemu.get()
         for vm in vms:
@@ -178,18 +237,29 @@ class NetboxCall(pynetbox.api):
         self.vm = self.virtualization.virtual_machines.get(self.netbox_id)
         self.vm_raw_dict = dict(self.vm)
 
-    def update_vm_information(self, new_info: dict = None):
+    def update_vm_information(
+        self, new_info: dict | None = None
+    ) -> dict | None:
+        """
+        Args:
+            new_info: New information for the VM
+
+        Returns: None if no new information is given, else the updated VM dict
+
+        """
         if not new_info:
             return None
         self.vm.update(new_info)
         return dict(self.vm)
 
-    def create_tag(self, tag_name: str, color: str = "c0c0c0"):
+    def create_tag(
+        self, tag_name: str | None = None, color: str = "c0c0c0"
+    ) -> int | None:
         """
         checks if a tag in Netbox exists, if not it will create the tag.
         :param tag_name: Name of the tag.
         :param color: Enter a valid hexadecimal RGB color code. Default is grey.
-        :return: tag name
+        :return: tag id or None
         """
         if not tag_name:
             return None
