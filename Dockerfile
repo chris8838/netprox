@@ -25,8 +25,9 @@ COPY wsgi.py .
 COPY pyproject.toml .
 COPY poetry.lock .
 COPY netprox netprox/
-RUN poetry install
 COPY README.md .
+
+RUN poetry install
 
 CMD ["poetry", "run", "gunicorn", "-w4", "-b0.0.0.0:5000", "wsgi:app"]
 
