@@ -130,3 +130,6 @@ dmypy.json
 /netprox/test.py
 /set_local_envs.sh
 .gitignore
+
+# backup files
+*backup*
