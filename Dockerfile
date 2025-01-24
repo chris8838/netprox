@@ -15,8 +15,7 @@ ENV FLASK_DEBUG=True
 ENV FLASK_HOST="127.0.0.1"
 ENV FLASK_SECRETKEY="beX0aem3vee7ohn"
 
-RUN apt-get install curl
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN pip install poetry==${POETRY_VERSION}
 
 RUN mkdir -p /NetProx
 WORKDIR /NetProx
