@@ -51,4 +51,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag netprox:$(date +%s)
+        run: docker build . --file Dockerfile --tag netprox:$(date "+%Y-%m-%d-%H-%M")
