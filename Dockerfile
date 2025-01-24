@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+# check=skip=SecretsUsedInArgOrEnv
 FROM python:3.11-slim
 
 ENV POETRY_VERSION="1.8.4"

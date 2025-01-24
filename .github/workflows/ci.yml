@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.11' ]
+        python-version: ['3.11']
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -30,12 +30,25 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install tox tox-gh-actions
+          # python -m pip install --upgrade pip
+          # pip install tox tox-gh-actions
           pip install poetry==1.8.3
-      - name: Run tox
+      - name: Run dev tests with pytest
         run: |
-          tox
+          poetry install -v --only dev,testing
+          poetry run pytest -v --cov
+      - name: Run main tests with pytest
+        run: |
+          poetry install -v --only main,testing
+          poetry run pytest -v --cov
+      - name: linting with Ruff
+        run: |
+          poetry install -v --only dev
+          poetry run ruff check .
+      
+      # - name: Run tox
+      #   run: |
+      #     tox
 
   build:
     needs:
