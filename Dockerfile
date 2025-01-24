@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3.11-slim
 
 ENV POETRY_VERSION="1.8.4"
 ENV LOG_LEVEL="DEBUG"
