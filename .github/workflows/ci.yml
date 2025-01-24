@@ -30,8 +30,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          # python -m pip install --upgrade pip
-          # pip install tox tox-gh-actions
+          python -m pip install --upgrade pip
           pip install poetry==1.8.3
       - name: Run dev tests with pytest
         run: |
@@ -45,11 +44,6 @@ jobs:
         run: |
           poetry install -v --only dev
           poetry run ruff check .
-      
-      # - name: Run tox
-      #   run: |
-      #     tox
-
   build:
     needs:
       - tox
